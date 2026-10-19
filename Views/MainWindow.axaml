@@ -1,0 +1,144 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:NDVI.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mapsui="clr-namespace:Mapsui.UI.Avalonia;assembly=Mapsui.UI.Avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="NDVI.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="NDVI">
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Background="#333333" Foreground="White">
+            <MenuItem Header="File">
+                <MenuItem Header="Open" Command="{Binding OpenFileDialog}" />
+                <MenuItem Header="Save" />
+                <Separator />
+                <MenuItem Header="Exit" />
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="About" />
+            </MenuItem>
+        </Menu>
+        <Border DockPanel.Dock="Right"
+                Width="250"
+                BorderThickness="1,0,0,0"
+                Padding="10">
+            <StackPanel Spacing="10">
+                <TextBlock Text="Controls &amp; Settings" FontWeight="Bold" FontSize="16"
+                           Margin="0,0,0,5" />
+                <Button Command="{Binding OpenFileDialog}" HorizontalAlignment="Stretch">Open File</Button>
+
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="60,*">
+                    <TextBlock VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"
+                               Foreground="Red" Margin="4"
+                               FontWeight="Bold">
+                        Red:
+                    </TextBlock>
+                    <TextBlock VerticalAlignment="Center" Grid.Row="1" Grid.Column="0"
+                               Foreground="Green" Margin="4"
+                               FontWeight="Bold">
+                        Green:
+                    </TextBlock>
+                    <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="0"
+                               Foreground="Blue" Margin="4"
+                               FontWeight="Bold">
+                        Blue:
+                    </TextBlock>
+                    <TextBlock VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Margin="4">
+                        Robust:
+                    </TextBlock>
+
+                    <TextBlock VerticalAlignment="Center" Grid.Row="4" Grid.Column="0"
+                               Foreground="Pink" Margin="4"
+                               FontWeight="Bold">
+                        NIR:
+                    </TextBlock>
+
+                    <ComboBox
+                        Margin="4"
+                        ItemsSource="{Binding BandChoices}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        SelectedIndex="{Binding SelectedRedIndex}"
+                        MaxDropDownHeight="100"
+                        HorizontalAlignment="Stretch"
+                        Foreground="Red"
+                        HorizontalContentAlignment="Center" />
+
+                    <ComboBox
+                        Margin="4"
+                        Foreground="Green"
+                        ItemsSource="{Binding BandChoices}"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        SelectedIndex="{Binding SelectedGreenIndex}"
+                        MaxDropDownHeight="100"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
+                    <ComboBox
+                        Margin="4"
+                        Foreground="Blue"
+                        ItemsSource="{Binding BandChoices}"
+                        Grid.Row="2" Grid.Column="1"
+                        SelectedIndex="{Binding SelectedBlueIndex}"
+                        MaxDropDownHeight="100"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center" />
+
+                    <CheckBox Margin="4" IsChecked="{Binding IsRobust}" Grid.Row="3" Grid.Column="1"
+                              x:Name="RobustCheckBox"
+                              HorizontalAlignment="Center"
+                              HorizontalContentAlignment="Center" />
+                    <ComboBox
+                        Margin="4"
+                        Foreground="Pink"
+                        ItemsSource="{Binding BandChoices}"
+                        Grid.Row="4" Grid.Column="1"
+                        SelectedIndex="{Binding SelectedNirIndex}"
+                        MaxDropDownHeight="100"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center" />
+                </Grid>
+            </StackPanel>
+        </Border>
+        <Grid x:Name="CompareContainer" ClipToBounds="True">
+            <!-- Bottom map (revealed on the right side of the slider) -->
+            <mapsui:MapControl x:Name="RightMapControl" />
+            <!-- Top map (clipped to the left side of the slider) -->
+            <mapsui:MapControl x:Name="LeftMapControl" />
+            <Canvas x:Name="OverlayCanvas">
+                <Rectangle x:Name="SliderLine"
+                           Width="2"
+                           Fill="White"
+                           IsHitTestVisible="False" />
+                <Border x:Name="SliderHandle"
+                        Width="40" Height="40"
+                        CornerRadius="20"
+                        Background="White"
+                        BorderBrush="#333333"
+                        BorderThickness="1"
+                        Cursor="SizeWestEast"
+                        PointerPressed="OnHandlePointerPressed"
+                        PointerMoved="OnHandlePointerMoved"
+                        PointerReleased="OnHandlePointerReleased">
+                    <TextBlock Text="&#x21C4;"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Foreground="#333333"
+                               FontSize="18" />
+                </Border>
+            </Canvas>
+        </Grid>
+    </DockPanel>
+</Window>

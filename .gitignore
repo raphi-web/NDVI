@@ -1,0 +1,22 @@
+# Build output
+bin/
+obj/
+publish/
+out/
+
+# IDEs
+.idea/
+.vs/
+.vscode/
+*.user
+*.DotSettings.user
+
+# Local test rasters
+*.tif
+*.tiff
+*.SAFE/
+*.zip
+
+# OS
+.DS_Store
+Thumbs.db
