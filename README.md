@@ -4,7 +4,7 @@ A desktop viewer for multispectral satellite imagery that computes and displays 
 
 Built with **C# / .NET 9**, **Avalonia UI** (MVVM), **GDAL**, **ILGPU** and **Mapsui**.
 
-<!-- Add a screenshot here: ![Screenshot](docs/screenshot.png) -->
+![NDVI Viewer: RGB composite and NDVI map side by side](docs/screenshot.png)
 
 ## Features
 
